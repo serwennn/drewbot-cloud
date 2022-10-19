@@ -199,7 +199,7 @@ class StgRoles(commands.Cog):
     
 
     @reactionrole.sub_command(description="Добавляет сразу несколько экзмепляров ролей за реакции на одно сообщение.")
-    async def addsome(self, ctx, message: float, roles, emojis):
+    async def addsome(self, ctx, message, roles, emojis):
         
         # ACCESS CHECK
         access = cur.execute("""SELECT role FROM access WHERE guild = ?""", (ctx.guild.id,)).fetchone()
@@ -212,12 +212,8 @@ class StgRoles(commands.Cog):
             if ctx.author.id != ctx.guild.owner_id: await ctx.send(embed = disnake.Embed(title=replic['error'], description="У вас нет доступа к этой функции!", color=botColor)); return
         # END CHECK
 
-       
-        roles = roles.split(" ")
-        emojis = emojis.split(" ")
+        roles, emojis = roles.split(" "), emojis.split(" ")
         pairs = []
-        print(roles)
-        print(emojis)
 
         cur.execute("""SELECT message, role, emoji FROM reactionrole WHERE guild = ?""", (ctx.guild.id,))
         content = cur.fetchall()
@@ -226,9 +222,28 @@ class StgRoles(commands.Cog):
         if ctx.guild.icon != None: embed.set_thumbnail(ctx.guild.icon)
         embed.description = random.choice(replic['loading'])
         await ctx.send(embed=embed)
+        
+        lastroles = []
+        for role in roles:
+            if role in lastroles:
+                embed = disnake.Embed(title=replic['error'], color=botColor)
+                embed.description = "Роли не могут повторяться.\nСледуйте образцу ниже:"
+                embed.set_image("https://media.discordapp.net/attachments/1030143536424824862/1030144530848174160/unknown.png")
+                await ctx.edit_original_message(embed=embed)
+                return
+            lastroles.append(role)
 
-        try:
-            message = await ctx.channel.fetch_meesage(message)
+        lastemojies = []
+        for emoji in emojis:
+            if emoji in lastemojies:
+                embed = disnake.Embed(title=replic['error'], color=botColor)
+                embed.description = "Эмодзи не могут повторяться.\nСледуйте образцу ниже:"
+                embed.set_image("https://media.discordapp.net/attachments/1030143536424824862/1030144530848174160/unknown.png")
+                await ctx.edit_original_message(embed=embed)
+                return
+            lastemojies.append(emoji)
+
+        try: message = await ctx.channel.fetch_message(message)
         except:
             embed = disnake.Embed(title=replic['error'], color=botColor)
             embed.description = "Такого сообщения не было найдено! Используйте ID сообщения, сообщение должно находится в этом же канале.\nСледуйте образцу ниже:"
@@ -256,12 +271,19 @@ class StgRoles(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             
-        for i in range(len(roles)):
-            pairs.append([roles[i], emojis[i]])
-            role = disnake.utils.get(ctx.guild.roles, id=int(str(roles[i])[3:-1]))
-            embed.add_field(name=role, value=f"ID: `{role.id}` Эмодзи: {emojis[i]}", inline=False)
+        try:
+            for i in range(len(roles)):
+                pairs.append([roles[i], emojis[i]])
+                role = disnake.utils.get(ctx.guild.roles, id=int(str(roles[i])[3:-1]))
+                embed.add_field(name=role, value=f"ID: `{role.id}` Эмодзи: {emojis[i]}", inline=False)
+        except:
+            embed = disnake.Embed(title=replic['error'], color=botColor)
+            embed.description = "Количество эмодзи и ролей должны быть одинаковы.\nСледуйте образцу ниже:"
+            embed.set_image("https://media.discordapp.net/attachments/1030143536424824862/1030144530848174160/unknown.png")
+            await ctx.send(embed=embed)
+            return
         
-        if (len(content) - len(roles)) <= 20: # +1
+        if (len(content) + len(roles)) <= 20: # +1
             if len(content) >= 1:
                 listexemprole = []
                 for addexemp in content:
@@ -274,7 +296,6 @@ class StgRoles(commands.Cog):
                     return
             
             for pair in pairs:
-                print(pair)
                 await message.add_reaction(pair[1])
 
                 cur.execute("""INSERT INTO reactionrole VALUES (?, ?, ?, ?)""", (ctx.guild.id, message.id, str(pair[0])[3:-1], pair[1],)) #pair[1] = emoji ; str(pair[0])[3:-1] = id role
@@ -285,7 +306,6 @@ class StgRoles(commands.Cog):
             await ctx.edit_original_message(embed=embed)
             return
         
-        print(pairs)
         embed.description = "Готово! Все роли и эмодзи успешно привязаны к этому сообщению. Чтобы получить полный список экзмепляров ролей за реакции введите /reactionrole list."
         await ctx.edit_original_message(embed=embed)
 

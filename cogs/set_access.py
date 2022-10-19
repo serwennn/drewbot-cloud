@@ -29,7 +29,8 @@ class AccessStg(commands.Cog):
             embed = disnake.Embed(title=f'🦊 : Административный доступ **{ctx.guild.name}**', color=botColor)
             if ctx.guild.icon != None: embed.set_thumbnail(ctx.guild.icon)
             embed.description = f"Доступ к данной команде имеет только владелец сервера!"
-            await ctx.send(embed=embed, view=None)
+            await ctx.send(embed=embed)
+            return
 
         async def delall_callback(interaction):
             if ctx.author.id == interaction.author.id:
@@ -83,7 +84,8 @@ class AccessStg(commands.Cog):
             embed = disnake.Embed(title=f'🦊 : Административный доступ **{ctx.guild.name}**', color=botColor)
             if ctx.guild.icon != None: embed.set_thumbnail(ctx.guild.icon)
             embed.description = f"Доступ к данной команде имеет только владелец сервера!"
-            await ctx.send(embed=embed, view=None)
+            await ctx.send(embed=embed)
+            return
         
         cur.execute("""SELECT role FROM access WHERE guild = ?""", (ctx.guild.id,))
         content = cur.fetchall()
@@ -123,7 +125,8 @@ class AccessStg(commands.Cog):
             embed = disnake.Embed(title=f'🦊 : Административный доступ **{ctx.guild.name}**', color=botColor)
             if ctx.guild.icon != None: embed.set_thumbnail(ctx.guild.icon)
             embed.description = f"Доступ к данной команде имеет только владелец сервера!"
-            await ctx.send(embed=embed, view=None)
+            await ctx.send(embed=embed)
+            return
         
         cur.execute("""SELECT role FROM access WHERE guild = ?""", (ctx.guild.id,))
         content = cur.fetchall()
