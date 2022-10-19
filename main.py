@@ -15,10 +15,10 @@ with open("appconfig.ini", 'r', encoding='utf-8') as configsource:
         if line[0] == "isdebug":
             if line[1] == "True":
                 botPrefix = 'b!'
-                botToken = 'MTAwNzU2NzE1ODUwNDU5NTUzNg.GkTIIT._a1wwzi1Y80AxPPxJ9HNiWidshLMyhv95RU7TM'
+                botToken = 'MTAwNzU2NzE1ODUwNDU5NTUzNg.G8-eem.kO2oMXnJHgzXJGO6DkDiHyx1xnfFCKa3yvyUOw'
             else:
                 botPrefix = 'd!'
-                botToken = 'OTk5NTYzMTQ0Mjc4MDYxMDg2.G4WkNX.KNbKgg82ULA1Renl8B-XWtWk0IJF0Ix864rcWA'
+                botToken = 'OTk5NTYzMTQ0Mjc4MDYxMDg2.GNsLXT.Mzvg_W6U3ymtSggSq8O7VH7msJGQJvuXnw9MRg'
 
 botColor = 0xf4a261
 dev = [735371414533701672, 981234922800951307]
@@ -96,6 +96,8 @@ async def reload(ctx, extension="all"):
         embed.description = f"Перезагрузка **{extension}** была прервана:\nВы не разработчик или доверенное лицо."
     await ctx.send(embed=embed)
 
+
+# OTHER
 @bot.command()
 async def help(ctx):
     embed = disnake.Embed(title=f'⚠️ : Важное объявление', color=botColor)
@@ -114,6 +116,12 @@ async def send(ctx, *, message):
             await ctx.send(embed=embed)
         else: await ctx.send(message)
 
+@bot.event
+async def on_ready():
+    print(botPrefix)
+    if botPrefix == "d!": print("[МАҢЫЗДЫ ХАБАР] DrewBot іске қосылды.")
+    else: print("[МАҢЫЗДЫ ХАБАР] DrewBot Beta іске қосылды. (Дамыту Режимі)")
+
 #for filename in os.listdir('./cogs'):
 #    if filename.endswith(".py"):
 #        print(f"Загрузка файла: {filename}\nБраузер файлов: {os.listdir('./cogs')}")
@@ -121,10 +129,11 @@ async def send(ctx, *, message):
 
 for a, b, files in os.walk('./cogs'):
     for file in files:
-        print(f"Браузер файлов: \"{file}\" (f{a})")
         if file.endswith('.py'):
-            print(f"Ког обнаружен: {file}")
+            print(f"Файл шолғышы: {file} ({a})")
+            print(f"Ког ашылды:   {file}")
             bot.load_extension(f"cogs.{file[:-3]}")
+
 
 # RUN RELEASE OR DEBUG BOT
 bot.run(botToken)
