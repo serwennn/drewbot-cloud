@@ -72,10 +72,6 @@ class Ent(commands.Cog):
     #              "1010128882806046841/unknown.png", "1010129311333879808/unknown.png", "1010129513969102878/unknown.png", "1010131814406443018/unknown.png"]
     #    photo = random.choice(photos)
     #    await ctx.send(f"https://media.discordapp.net/attachments/1010121538953035786/{photo}")
-    
-    @commands.command(aliases=["корольишут", "киш"])
-    async def korolishut(self, ctx):
-        await ctx.send("")
 
 
 def setup(bot):

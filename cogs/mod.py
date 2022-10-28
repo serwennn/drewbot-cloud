@@ -33,16 +33,14 @@ class Mod(commands.Cog):
 
             authorindex, memberindex = 0, 0
             for role in ctx.guild.roles:
-                if role.id == ctx.author.top_role.id:
-                    authorindex = ctx.guild.roles.index(role)
-                if role.id == member.top_role.id:
-                    memberindex = ctx.guild.roles.index(role)
+                if role.id == ctx.author.top_role.id: authorindex = ctx.guild.roles.index(role)
+                if role.id == member.top_role.id: memberindex = ctx.guild.roles.index(role)
 
             if int(authorindex) > int(memberindex):
                 await member.timeout(duration=to_time(time), reason=f"Дал мьют: {ctx.author}(ID: {ctx.author.id}). Причина: \"{reason}.\"")
             else:
                 embed = disnake.Embed(title=replic["error"], color=botColor)
-                embed.description = "У вас не хватает прав для мьюта участника!"
+                embed.description = "Вы не можете давать мьют участникам выше или равным вашей роли!"
                 await ctx.send(embed=embed)
                 return
 

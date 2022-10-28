@@ -23,7 +23,7 @@ class Inf(commands.Cog):
             await ctx.send(embed=embed)
         except:
             embed = disnake.Embed(color=botColor, title=f'Ошибка!')
-            embed.description = "Такая команда не найдена!"
+            embed.description = "Такой команды нет, или для неё ещё не было написано подробного описания!"
             await ctx.send(embed=embed)
 
     @commands.slash_command(aliases=["помощь", "хелп"], description="Отправляет сообщение со справкой о всех командах или же определённой команды.")
@@ -43,9 +43,9 @@ class Inf(commands.Cog):
 
         embed.add_field(name="""☔ : **Модерация:**""", value="""`mute` `unmute` `kick` `ban` `unban`""", inline=False)
         embed.add_field(name="""🏵️ : **Информация:**""", value="""`server` `user` `avatar`""", inline=False)
-        embed.add_field(name="""🛠️ : **Настройки:**""", value="""~~`whitelist`~~ ~~`anticrash`~~ `reactionrole` `autorole`""", inline=False)
-        embed.add_field(name="""🌊 : **Развлечения:**""", value="""`fox` `cat` `dog`""", inline=False)
-        embed.add_field(name="""🍚 : **Бот:**""", value="""`help` `info` `ping` """, inline=False)
+        embed.add_field(name="""🛠️ : **Настройки:**""", value="""`access` `message` `reactionrole` `autorole` ~~`whitelist`~~ ~~`anticrash`~~""", inline=False)
+        embed.add_field(name="""🌊 : **Развлечения:**""", value="""`fox` `cat` `dog` `embed`""", inline=False)
+        embed.add_field(name="""🍚 : **Бот:**""", value="""`help` `info` `premium` `ping`""", inline=False)
 
         embed.set_footer(text=f"Создатель — seltfox#2356. Версия DrewBot {botVersion} - от {botVersionDate}")
 
@@ -53,6 +53,35 @@ class Inf(commands.Cog):
         item = disnake.ui.Button(style=disnake.ButtonStyle.red, label="Сервер Поддержки", emoji="🦊", url="https://discord.gg/B9mQ26fCWN")
         view.add_item(item=item)
         await ctx.send(embed=embed, view=view)  # Отправляем Embed
+
+    
+    @commands.slash_command(description="Оформление/просмотр возможностей DrewBot Premium.")
+    async def premium(self, ctx):
+        async def buycallback(interaction):
+            if ctx.author.id == interaction.author.id:
+                embed = disnake.Embed(title="🦊 : DrewBot Premium", color=botColor)
+                if ctx.guild.icon != None: embed.set_thumbnail(ctx.guild.icon)
+                embed.description = f"Извините, но в данный момент возможность покупки DrewBot Premium отключена. Мы ищем платформу для принятия средств, заместо Boosty."
+
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+            else:
+                embed = disnake.Embed(title=replic['error'], color=botColor)
+                embed.description = "Доступ к этой функции имеет только тот кто вызвал её!"
+                await interaction.response.send_message(embed=embed, ephemeral=True)
+
+        embed = disnake.Embed(title="🦊 : DrewBot Premium", color=botColor)
+        embed.description = f"Хотите оформить DrewBot Premium для **{ctx.guild}**? Давайте мы расскажем вам о ней по-подробней!\nПлатная подписка DrewBot Premium, которая открывает больше возможностей бота для вашего сервера! Множество функций и увеличение лимитов, а именно:"
+        embed.add_field(name="Удвоение лимитов!", value="Удвоенные лимиты на использование больших количеств экземпляров на такие команды как reactionrole, autorole и другие!", inline=False)
+        embed.add_field(name="Более качественная автомодерация!", value="Использование больших вычислительных процессов и записи некоторой информации в базу данных способствует улучшению качества работы автомодерации!", inline=False)
+
+        view = disnake.ui.View()
+        serverbtn = disnake.ui.Button(style=disnake.ButtonStyle.red, label="Сервер Поддержки", emoji="🧡", url="https://discord.gg/B9mQ26fCWN")
+        buybtn = disnake.ui.Button(style=disnake.ButtonStyle.success, label="490KZT (65RUB)", emoji="💳")
+        buybtn.callback = buycallback
+        view.add_item(item=buybtn)
+        view.add_item(item=serverbtn)
+        await ctx.send(embed=embed, view=view)  # Отправляем Embed
+        
 
 
     @commands.slash_command(description="Текущий пинг Discord API бота.", aliases=["пинг"])
