@@ -211,8 +211,9 @@ class StgRoles(commands.Cog):
                 
                 role = disnake.utils.get(ctx.guild.roles, id=int(str(roles[i])[3:-1]))
                 try:
-                    testm = await ctx.guild.fetch_member(self.bot.user.id)
-                    await testm.add_roles(role); await testm.remove_roles(role)
+                    testm = await ctx.guild.fetch_member(subcombot.user.id)
+                    await testm.add_roles(role)
+                    await testm.remove_roles(role)
                 except:
                     embed = disnake.Embed(title=replic["error"], color=botColor)
                     embed.description = "Одна из ролей выше моей, поэтому я не смогу выдавать её. Пожалуйста, переместите мою роль выше."
@@ -368,7 +369,7 @@ class StgRoles(commands.Cog):
 
         await ctx.edit_original_message(embed=embed, view=view)
     
-    
+
 
     @autorole.sub_command(description="Создаёт новый экземпляр автороли.")
     async def add(self, ctx, role: disnake.Role):
