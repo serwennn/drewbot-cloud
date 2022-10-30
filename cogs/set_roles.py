@@ -377,8 +377,8 @@ class StgRoles(commands.Cog):
         # ACCESS CHECK
         access = cur.execute("""SELECT role FROM access WHERE guild = ?""", (ctx.guild.id,)).fetchone()
         if access != None:
-            for role in ctx.author.roles:
-                if role.id not in access: isAccessed = False
+            for roleAccess in ctx.author.roles:
+                if roleAccess.id not in access: isAccessed = False
                 else: isAccessed = True; break
             if isAccessed == False and int(ctx.author.id) != int(ctx.guild.owner_id): await ctx.send(embed = disnake.Embed(title=replic['error'], description="У вас нет доступа к этой функции!", color=botColor)); return
         else:
@@ -400,6 +400,7 @@ class StgRoles(commands.Cog):
         await ctx.send(embed=embed)
 
         try:
+            
             testm = await ctx.guild.fetch_member(self.bot.user.id)
             await testm.add_roles(role)
             await testm.remove_roles(role)
@@ -433,13 +434,7 @@ class StgRoles(commands.Cog):
             embed.description = "Извините, но вы не можете создать больше 10 экземпляров авторолей на одном сервере!"
             await ctx.edit_original_message(embed=embed)
     
-    @add.error
-    async def rraddError(self, ctx, error):
-        embed = disnake.Embed(title = replic['error'], color = botColor)
-        embed.description = replic['unk_error']
-        if isinstance(error, commands.RoleNotFound):
-            embed.description = f"""🎭 : Такая роль не найдена!"""
-        await ctx.edit_original_message(embed = embed)
+    
 
 
 def setup(bot):
