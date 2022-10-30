@@ -161,6 +161,7 @@ async def on_ready():
     if botPrefix == "d!": print("[МАҢЫЗДЫ ХАБАР] DrewBot іске қосылды.")
     else: print("[МАҢЫЗДЫ ХАБАР] DrewBot Beta іске қосылды. (Дамыту Режимі)")
 
+
 #for filename in os.listdir('./cogs'):
 #    if filename.endswith(".py"):
 #        print(f"Загрузка файла: {filename}\nБраузер файлов: {os.listdir('./cogs')}")
