@@ -16,10 +16,10 @@ with open("appconfig.ini", 'r', encoding='utf-8') as configsource:
         if line[0] == "isdebug":
             if line[1] == "True":
                 botPrefix = 'b!'
-                botToken = 'MTAwNzU2NzE1ODUwNDU5NTUzNg.G8-eem.kO2oMXnJHgzXJGO6DkDiHyx1xnfFCKa3yvyUOw'
+                botToken = 'https://www.youtube.com/watch?v=ggqV0WWaykM&ab_channel=sawakoyamanaka'
             else:
                 botPrefix = 'd!'
-                botToken = 'OTk5NTYzMTQ0Mjc4MDYxMDg2.GNsLXT.Mzvg_W6U3ymtSggSq8O7VH7msJGQJvuXnw9MRg'
+                botToken = 'https://www.youtube.com/watch?v=ggqV0WWaykM&ab_channel=sawakoyamanaka'
 
 botColor = 0xf4a261
 dev = [735371414533701672, 981234922800951307]
